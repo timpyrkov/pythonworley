@@ -22,7 +22,59 @@ https://github.com/timpyrkov/procedural-art/
 
 https://www.instagram.com/timpyrkov/
 
-# cellular noise
+# ## Generate Worley noise centers and Voronoi tesselation
+
+Worley noise and Voronoi tesselation work on any random centers. However, random centers placed at regular grid give us an easy way to make a pattern that can be seamlessly tiled in any direction.
+
+```
+import pylab as plt
+from scipy import spatial
+from pythonworley import noisecoords, worley
+
+# Set grid shape for randomly seeded gradients
+shape = (8,4)
+
+# Generate grid noise and set flag boundary=True 
+# to pad it with periodic boundary points
+noise = noisecoords(*shape, boundary=True, seed=0)
+
+# Fltten X, Y coordinates and generate Voronoi tesselation
+coords = noise.reshape(2,-1).T
+vor = spatial.Voronoi(coords)
+vert = vor.vertices
+edge = vor.ridge_vertices
+face = vor.regions
+
+# Random colors for faces
+
+plt.figure(figsize=(12,6), facecolor="grey")
+# Fill faces with random colors
+rand = np.random.uniform(0.2, 0.8, len(face))
+color = plt.get_cmap("Greys")(rand)
+for i, f in enumerate(face):
+    if len(f) and min(f) > 0:
+        v = vert[f]
+        plt.fill(v[:,0], v[:,1], c=color[i])
+
+# Draw edges
+for e in edge:
+    if min(e) > 0:
+        v = vert[e]
+        plt.plot(v[:,0], v[:,1], "-k", lw=12)
+
+# Plot centers
+plt.scatter(*noise, c= "black", s=200)
+
+# Set xlim and ylim to hide periodic boundary padding points
+plt.xlim(0, shape[0])
+plt.ylim(0, shape[1])
+plt.axis('off')
+plt.show()
+```
+![](https://github.com/timpyrkov/pythonworley/blob/master/media/img_voronoi.jpg?raw=true)
+
+
+# Generate cellular noise
 
 Worley noise produces cellular noise pattern when colored dark to light as the distance to noise centers increases.
 
