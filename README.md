@@ -22,7 +22,7 @@ https://github.com/timpyrkov/procedural-art/
 
 https://www.instagram.com/timpyrkov/
 
-# ## Generate Worley noise centers and Voronoi tesselation
+# Generate Worley noise centers and Voronoi tesselation
 
 Worley noise and Voronoi tesselation work on any random centers. However, random centers placed at regular grid give us an easy way to make a pattern that can be seamlessly tiled in any direction.
 
