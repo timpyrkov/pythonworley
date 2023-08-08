@@ -45,9 +45,9 @@ vert = vor.vertices
 edge = vor.ridge_vertices
 face = vor.regions
 
-# Random colors for faces
 
 plt.figure(figsize=(12,6), facecolor="grey")
+
 # Fill faces with random colors
 rand = np.random.uniform(0.2, 0.8, len(face))
 color = plt.get_cmap("Greys")(rand)
@@ -60,10 +60,10 @@ for i, f in enumerate(face):
 for e in edge:
     if min(e) > 0:
         v = vert[e]
-        plt.plot(v[:,0], v[:,1], "-k", lw=12)
+        plt.plot(v[:,0], v[:,1], c="black", lw=12)
 
 # Plot centers
-plt.scatter(*noise, c= "black", s=200)
+plt.scatter(*noise, c="black", s=200)
 
 # Set xlim and ylim to hide periodic boundary padding points
 plt.xlim(0, shape[0])
@@ -216,8 +216,8 @@ for i in range(nline):
     center, width, height = rand[i]
     center += 3 * w * np.arange(nblock) + w * i
     width += w
-    for i in range(nblock):
-        plot_building(center[i], width[i], height[i], 
+    for j in range(nblock):
+        plot_building(center[j], width[j], height[j], 
                       floor_color, window_color, basement=i)
 plt.axis('off')
 plt.show()
