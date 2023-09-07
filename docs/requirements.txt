@@ -4,3 +4,4 @@ numpy
 scipy
 IPython
 sphinx-rtd-theme
+pythonworley
