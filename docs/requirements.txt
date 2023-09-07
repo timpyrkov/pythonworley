@@ -5,3 +5,4 @@ scipy
 IPython
 sphinx-rtd-theme
 pythonworley
+matplotlib
