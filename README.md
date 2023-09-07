@@ -4,10 +4,11 @@
 [![Documentation Status](https://readthedocs.org/projects/pythonworley/badge/?version=latest)](https://pythonworley.readthedocs.io/en/latest/?badge=latest)
 
 # Pythonworley
+
 ## Worley noise in python -- procedural generative art tool to seamlessly tile texture patterns in any dimensions
 <br>
 
-## Worley noise is a noise function introduced by Steven Worley in 1996. Worley noise is an extension of the Voronoi tessellation.
+## Worley noise is a function introduced by Steven Worley in 1996. Worley noise is an extension of the Voronoi tessellation.
 #
 
 
@@ -22,9 +23,9 @@ https://github.com/timpyrkov/procedural-art/
 
 https://www.instagram.com/timpyrkov/
 
-# Generate Worley noise centers and Voronoi tesselation
+# Worley noise centers and Voronoi tesselation
 
-Worley noise and Voronoi tesselation work on any random centers. However, random centers placed at regular grid give us an easy way to make a pattern that can be seamlessly tiled in any direction.
+Worley noise and Voronoi tesselation work on any random centers. Yet, placement of random centers placed in a regular grid gives an easy way to make a pattern which can be seamlessly tiled in any direction.
 
 ```
 import pylab as plt
@@ -34,11 +35,11 @@ from pythonworley import noisecoords, worley
 # Set grid shape for randomly seeded gradients
 shape = (8,4)
 
-# Generate grid noise and set flag boundary=True 
+# Generate grid noise and set boundary=True 
 # to pad it with periodic boundary points
 noise = noisecoords(*shape, boundary=True, seed=0)
 
-# Fltten X, Y coordinates and generate Voronoi tesselation
+# Flatten X, Y coordinates and generate Voronoi tesselation
 coords = noise.reshape(2,-1).T
 vor = spatial.Voronoi(coords)
 vert = vor.vertices
@@ -68,15 +69,15 @@ plt.scatter(*noise, c="black", s=200)
 # Set xlim and ylim to hide periodic boundary padding points
 plt.xlim(0, shape[0])
 plt.ylim(0, shape[1])
-plt.axis('off')
+plt.axis("off")
 plt.show()
 ```
 ![](https://github.com/timpyrkov/pythonworley/blob/master/media/img_voronoi.jpg?raw=true)
 
 
-# Generate cellular noise
+# Cellular noise
 
-Worley noise produces cellular noise pattern when colored dark to light as the distance to noise centers increases.
+Worley noise produces cellular noise pattern when colored dark to light with the distance to noise centers increasing.
 
 ```
 import pylab as plt
@@ -85,33 +86,34 @@ from pythonworley import worley
 # Set grid shape for randomly seeded gradients
 shape = (4,4)
 
-# Set density - output shape will be dens * shape = (128,128)
+# Set density - output shape will be dens * shape = (256,256)
 dens = 64
 
 # Generate noise and centers
 w, c = worley(shape, dens=dens, seed=0)
 
-# Worley noise is an array of distances to the Nth closests neighbour center.
-# Select the first (the smallest). Then transpose, because plt.imshow treats axis 0 as the "Y".
+# Worley noise is an array of distances to the Nth closest neighbour centers.
+# Let's select the first (the smallest). 
+# Then transpose, because plt.imshow will treat axis 0 as the "Y".
 w = w[0].T
 
-# Test that noise tiles seamlessly
+# Concatenate to test that noise tiles seamlessly
 w = np.concatenate([w] * 2, axis=1)
 
 plt.figure(figsize=(12,6))
-plt.imshow(w, cmap=plt.get_cmap('Greys_r'))
-plt.plot([256,256], [0,256], '--k', lw=3)
-# plt.scatter(*c, c= "r")
-plt.axis('off')
+plt.imshow(w, cmap=plt.get_cmap("Greys_r"))
+plt.plot([256,256], [0,256], "--", lw=3, color="black")
+# plt.scatter(*c, c="white")
+plt.axis("off")
 plt.show()
 
 ```
 ![](https://github.com/timpyrkov/pythonworley/blob/master/media/img_tile.jpg?raw=true)
 
 
-# Generate bubble pettern
+# Bubble pettern
 
-Worley noise produces bubble pattern when colored light to dark as the distance to noise centers increases.
+Worley noise produces bubble pattern when colored light to dark as with the distance to noise centers increasing.
 
 ```
 dens = 64
@@ -120,17 +122,17 @@ w, c = worley(shape, dens=dens, seed=0)
 w = w[0].T
 
 plt.figure(figsize=(12,6))
-plt.imshow(w, cmap=plt.get_cmap('Greys'))
-# plt.scatter(*c, c= "r")
-plt.axis('off')
+plt.imshow(w, cmap=plt.get_cmap("Greys"))
+# plt.scatter(*c, c="black")
+plt.axis("off")
 plt.show()
 ```
 ![](https://github.com/timpyrkov/pythonworley/blob/master/media/img_bubble.jpg?raw=true)
 
 
-# Generate cobblestone pattern
+# Cobblestone pattern
 
-Worley noise produces ccobblestone pavement pattern when taking the difference between the smallest and the second smallest distances from the Worley noise array.
+Worley noise can produce ccobblestone pavement pattern. To do that we take the difference between the smallest and the second smallest distances to nise centers.
 
 ```
 dens = 64
@@ -139,19 +141,19 @@ w, c = worley(shape, dens=dens, seed=0)
 w = w[1].T - w[0].T
 
 plt.figure(figsize=(12,6))
-plt.imshow(w, cmap=plt.get_cmap('Greys_r'))
-# plt.scatter(*c, c= "r")
-plt.axis('off')
+plt.imshow(w, cmap=plt.get_cmap("Greys_r"))
+# plt.scatter(*c, c="black")
+plt.axis("off")
 plt.show()
 ```
 ![](https://github.com/timpyrkov/pythonworley/blob/master/media/img_stone.jpg?raw=true)
 
 
-# Procedural star field
+# Generate procedural stars
 
-* When generating a random star field, a problem is how keep stars apart. Unfortunately random placememts tends to put some stars extremely close to each other.
+* When generating a random procedural star field, a problem is how keep stars apart. Unfortunately, random placememt often tends to put some stars too close to each other.
 
-* An elegant solution is to place stars based on the grid noise. Though we do not use Worley noise in this example, the grid noise is similar to that we used to generate Worley noise centers above.
+* An elegant solution is to place stars based on the regular grid noise. Then shrink the size of each star to keep it within its grid cell. In this example we do not use Worley noise itself, but we use the grid noise which is similar to what we used to generate Worley noise centers above.
 
 ```
 shape = (20,10)
@@ -165,31 +167,31 @@ np.random.seed(0)
 phi = np.random.uniform(0, 2 * np.pi, x.shape)
 r = np.random.uniform(0, 0.5, x.shape)
 
-# Shrink star size to keep it inside its cell.
-# Alse, we want more small stars - for the background effect.
+# Shrink star size to keep it within its cell.
+# Also, we want more small stars - for the background effect.
 # To do that we rescale displacements: r -> 1/2 - 0.001 / r.
 r = np.clip(0.5 - 1e-3 / r, 0, None)
 size = 200 * (0.5 - r) - 0.4
 
-# Convert r and phi to cartesian coordinates using Euler formula.
+# Convert r and phi to cartesian coordinates using the Euler formula.
 z = r * np.exp(1j * phi)
 dx, dy = z.real, z.imag
 x, y = x + dx, y + dy
 
 plt.figure(figsize=(12,6), facecolor="black")
 plt.scatter(x, y, c="white", s=size)
-plt.axis('off')
+plt.axis("off")
 plt.show()
 ```
 ![](https://github.com/timpyrkov/pythonworley/blob/master/media/img_stars.png?raw=true)
 
 
-# Procedural cityline
+# Generate procedural cityline
 
-Again we do not use Worley noise itself in this example. Instead we generate a random cityline based on the grid noise which is similar to that we used to generate Worley noise centers above.
+Again, in this example we do not use Worley noise itself. Instead we generate a random cityline based on the grid noise which is similar to what we used to generate Worley noise centers above.
 
 ```
-# Function to plot a building based its randomly generated center, width, and height
+# Let's werite a function to plot a building as a set of bar plots
 def plot_building(center, width, height, floor_color, window_color, floor=3, basement=0):
     nfloor = int(height)
     if nfloor > floor:
@@ -200,26 +202,27 @@ def plot_building(center, width, height, floor_color, window_color, floor=3, bas
         plt.bar(centers, heights, width=width, color=colors)
 
 
-nblock = 6 # Number of blocks per line
-nline = 3 # Number of lines
+nparams = 3 # Position, width, and height per a building block
+nblocks = 6 # Number of blocks per line
+nlines = 3 # Number of lines
 w = 20 # Average block width
 
 # Generate grid noise
 np.random.seed(0)
-rand = np.random.uniform(0, w, (nline, 3, nblock))
+rand = np.random.uniform(0, w, (nlines, nparams, nblocks))
 
 # Plot blocks line by line
 plt.figure(figsize=(18,6), facecolor="w")
-for i in range(nline):
-    darkness = (i + np.arange(2) + 1) / (nline + 1)
+for i in range(nlines):
+    darkness = (i + np.arange(2) + 1) / (nlines + 1)
     floor_color, window_color = plt.get_cmap("Greys")(darkness)
     center, width, height = rand[i]
-    center += 3 * w * np.arange(nblock) + w * i
+    center += 3 * w * np.arange(nblocks) + w * i
     width += w
-    for j in range(nblock):
+    for j in range(nblocks):
         plot_building(center[j], width[j], height[j], 
                       floor_color, window_color, basement=i)
-plt.axis('off')
+plt.axis("off")
 plt.show()
 ```
 ![](https://github.com/timpyrkov/pythonworley/blob/master/media/img_city.png?raw=true)

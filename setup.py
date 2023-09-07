@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name="pythonworley",
-    version="0.0.1",
+    version="0.0.2",
     author="Tim Pyrkov",
     author_email="tim.pyrkov@gmail.com",
     description="Worley noise in python - seamlessly tile in any dimensions",
