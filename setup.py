@@ -7,10 +7,10 @@ def read(fname):
 
 setup(
     name="pythonworley",
-    version="0.0.2",
+    version="0.0.3",
     author="Tim Pyrkov",
     author_email="tim.pyrkov@gmail.com",
-    description="Worley noise in python - seamlessly tile in any dimensions",
+    description="Worley noise generator | Python | seamlessly tile in any dimensions",
     long_description=read("README.md"),
     license = "MIT License",
     long_description_content_type="text/markdown",
